@@ -32,15 +32,15 @@ class KeypointsDataset(Dataset):
     def __getitem__(self, index):  
         
         img = self.transform(Image.open(self.imgs[index]))
-        label = self.labels[index]
+        labels = self.labels[index]
         
         maps = np.zeros((self.num_classes, self.img_height, self.img_width), dtype='float32')
         offsets_x = np.zeros((self.num_classes, self.img_height, self.img_width), dtype='float32')
         offsets_y = np.zeros((self.num_classes, self.img_height, self.img_width), dtype='float32')
         # starttime = datetime.now()
         for i in range(0, self.num_classes * 3, 3):
-            x = label[i]
-            y = label[i + 1]
+            x = labels[i]
+            y = labels[i + 1]
             
             _i = i // 3
             if x == 0 and y == 0:
@@ -58,7 +58,7 @@ class KeypointsDataset(Dataset):
             offsets_y[_i] = self.offsets_y_value[self.img_height - y : self.img_height * 2 - y, 
                                                  self.img_width  - x : self.img_width * 2  - x]      
 
-        return img, (maps, offsets_x, offsets_y)
+        return img, (maps, offsets_x, offsets_y), labels
     
     def __len__(self):
         return len(self.labels)
