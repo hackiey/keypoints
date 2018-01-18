@@ -1,0 +1,12 @@
+
+NUM_CLASSES = 14
+IMG_HEIGHT  = 353
+IMG_WIDTH   = 257
+
+IMG_SMALL_HEIGHT = 120
+IMG_SMALL_WIDTH  = 96
+
+RADIUS = 25
+
+epochs = 10
+batch_size = 64
