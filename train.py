@@ -1,12 +1,12 @@
 from torch.utils.data import Dataset, DataLoader
 from config import NUM_CLASSES, IMG_HEIGHT, IMG_WIDTH, epochs, batch_size
 from src.model import Keypoints
-from src.dataset import KeypointsDataSet
+from src.dataset import KeypointsDataset
 
 # dataset
 with open('../data/annotation/annotation_train_cropped_humans.pkl', 'rb') as f:
     labels = pickle.load(f)
-dataset = KeypointsDataSet('../data/train_cropped_humans/', labels, NUM_CLASSES, IMG_HEIGHT, IMG_WIDTH, RADIUS)
+dataset = KeypointsDataset('../data/train_cropped_humans/', labels, NUM_CLASSES, IMG_HEIGHT, IMG_WIDTH, RADIUS)
 dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=4)
 
 # model

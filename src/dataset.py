@@ -6,7 +6,7 @@ import pickle
 import os
 from datetime import datetime
 
-class DeepDataset(Dataset):
+class KeypointsDataset(Dataset):
     def __init__(self, img_folder, labels, num_classes, img_height, img_width, radius):
         self.num_classes = num_classes
         self.img_height = img_height
@@ -15,7 +15,7 @@ class DeepDataset(Dataset):
         
         self.imgs = []
         self.labels = labels
-        
+
         for i in range(len(self.labels)):
             self.imgs.append(os.path.join(img_folder, str(i)+'.jpg'))
             
