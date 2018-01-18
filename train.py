@@ -1,9 +1,9 @@
-from torch.utils.data import Dataset, DataLoader
 import pickle
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
+from torch.utils.data import DataLoader
 from config import NUM_CLASSES, IMG_HEIGHT, IMG_WIDTH, RADIUS, epochs, batch_size
 from src.model import Keypoints
 from src.dataset import KeypointsDataset
@@ -64,7 +64,6 @@ for epoch in range(epochs):
         
         print('[%d, %5d] loss: %.3f' % (epoch + 1, i_batch + 1, loss.data[0]), end='')
         print('\r', end='')
-        # torch.save(keypoints.state_dict(), 'model_'+str(epoch)+'.pth')
     print(running_loss / i_batch)
     
     torch.save(keypoints.state_dict(), '../checkpoints/model_1_18_'+str(epoch)+'.pth')

@@ -1,3 +1,5 @@
+import torch
+from torch.autograd import Variable
 class Prediction:
     def __init__(self, model, num_classes, img_height, img_width, img_small_height, img_small_width, use_cuda):
         self.model = model
