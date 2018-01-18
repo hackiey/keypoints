@@ -1,5 +1,10 @@
 from torch.utils.data import Dataset, DataLoader
-from config import NUM_CLASSES, IMG_HEIGHT, IMG_WIDTH, epochs, batch_size
+import pickle
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.autograd import Variable
+from config import NUM_CLASSES, IMG_HEIGHT, IMG_WIDTH, RADIUS, epochs, batch_size
 from src.model import Keypoints
 from src.dataset import KeypointsDataset
 
@@ -9,8 +14,21 @@ with open('../data/annotation/annotation_train_cropped_humans.pkl', 'rb') as f:
 dataset = KeypointsDataset('../data/train_cropped_humans/', labels, NUM_CLASSES, IMG_HEIGHT, IMG_WIDTH, RADIUS)
 dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=4)
 
+use_cuda = torch.cuda.is_available()
+# use_cuda = False
+Tensor = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
+if use_cuda:
+    torch.cuda.set_device(2)
+
+# loss
+smoothL1Loss = nn.SmoothL1Loss()
+bceLoss = nn.BCELoss()
 # model
 keypoints = Keypoints(NUM_CLASSES)
+keypoints = keypoints.cuda() if use_cuda else keypoints
+# optimizer
+optimizer = optim.Adam(keypoints.parameters(), lr=0.0001)
+
 for epoch in range(epochs):
     running_loss = 0.0
     for i_batch, sample_batched in enumerate(dataloader):
@@ -49,5 +67,5 @@ for epoch in range(epochs):
         # torch.save(keypoints.state_dict(), 'model_'+str(epoch)+'.pth')
     print(running_loss / i_batch)
     
-    torch.save(keypoints.state_dict(), '../checkpoints/model_1_15_'+str(epoch)+'.pth')
+    torch.save(keypoints.state_dict(), '../checkpoints/model_1_18_'+str(epoch)+'.pth')
 

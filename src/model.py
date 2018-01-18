@@ -4,14 +4,14 @@ import torch.nn as nn
 
 class Keypoints(nn.Module):
     def __init__(self, num_classes, img_height=353, img_width=257, resnet=18):
-        super(DeepKeypoints, self).__init__()
+        super(Keypoints, self).__init__()
         
         self.num_classes = num_classes
         self.num_outputs = num_classes * 3
         self.img_height = img_height
         self.img_width = img_width
         
-        if resent == 18:
+        if resnet == 18:
             self.resnet = torchvision.models.resnet18()
             self.conv1by1 = nn.Conv2d(512, self.num_outputs, (1,1))
         elif resnet == 101:
