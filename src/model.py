@@ -2,7 +2,7 @@ import torch
 import torchvision
 import torch.nn as nn
 
-class DeepKeypoints(nn.Module):
+class Keypoints(nn.Module):
     def __init__(self, num_classes, img_height=353, img_width=257, resnet=18):
         super(DeepKeypoints, self).__init__()
         
