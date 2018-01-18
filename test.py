@@ -25,12 +25,14 @@ if use_cuda:
     keypoints = keypoints.cuda()
 
 prediction = Prediction(deep_keypoints, NUM_CLASSES, IMG_HEIGHT, IMG_WIDTH, IMG_SMALL_HEIGHT, IMG_SMALL_WIDTH, use_cuda)
-img, _, _ = dataset[221]
-img = img.cuda()
-time1 = datetime.now()
-result, keypoints = prediction.predict(img)
-time2 = datetime.now()
-print(time2 - time1)
-print(keypoints)
-img = img.cpu().numpy().transpose((1,2,0))
-prediction.plot(img, result, keypoints)
+
+error = 0
+for i_batch, sample_batched in enumerate(dataloader):
+
+    X = sample_batched[0]
+    label_batched = sample_batched[2]
+
+    X = X.cuda()
+    result, keypoints = prediction.predict(img)
+
+    break
