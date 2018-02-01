@@ -1,5 +1,6 @@
 import pickle
 import torch
+from torchvision import transforms
 from torch.utils.data import DataLoader
 from config import NUM_CLASSES, IMG_HEIGHT, IMG_WIDTH, IMG_SMALL_HEIGHT, IMG_SMALL_WIDTH, RADIUS, epochs, batch_size
 from src.model import Keypoints
@@ -8,10 +9,10 @@ from src.prediction import Prediction
 from datetime import datetime
 import matplotlib.pyplot as plt
 from PIL import Image
-
+import numpy as np
 # model
-keypoints = Keypoints(NUM_CLASSES)
-keypoints.load_state_dict(torch.load('../checkpoints/model_3.pth'))
+keypoints = Keypoints(NUM_CLASSES, img_height=IMG_HEIGHT, img_width=IMG_WIDTH)
+keypoints.load_state_dict(torch.load('../character_checkpoints/model_1_18_4.pth'))
 
 # cuda
 use_cuda = torch.cuda.is_available()
@@ -21,16 +22,15 @@ if use_cuda:
     keypoints = keypoints.cuda()
 
 prediction = Prediction(keypoints, NUM_CLASSES, IMG_HEIGHT, IMG_WIDTH, IMG_SMALL_HEIGHT, IMG_SMALL_WIDTH, use_cuda)
+transform = transform = transforms.Compose([
+    transforms.ToTensor()
+])
 
 img = Image.open('../data/test_cropped_humans/0.jpg')
-img = transform(img)
-img = img.cuda()
+img = np.array(img)
+img_t = transform(img)
+img_t = img_t.cuda()
+result, keypoints = prediction.predict(img_t)
 
-print(img.shape)
-time1 = datetime.now()
-result, keypoints = prediction.predict(img)
-time2 = datetime.now()
-print(time2 - time1)
-print(keypoints)
-img = img.cpu().numpy().transpose((1,2,0))
-prediction.plot(img, result, keypoints)
+keypoints = keypoints.cpu().numpy()
+prediction.plot(img, result, keypoints[0])
