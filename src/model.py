@@ -15,7 +15,7 @@ class Keypoints(nn.Module):
             self.resnet = torchvision.models.resnet18()
             self.conv1by1 = nn.Conv2d(512, self.num_outputs, (1,1))
         elif resnet == 101:
-            self.resnet = torchvision.models.resnet18()
+            self.resnet = torchvision.models.resnet101()
             self.conv1by1 = nn.Conv2d(2048, self.num_outputs, (1,1))
 
         self.resnet = nn.Sequential(*list(self.resnet.children())[:-2])
